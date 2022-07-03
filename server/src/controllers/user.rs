@@ -1,5 +1,5 @@
 use crate::models::user::User;
-use crate::services::database;
+use crate::services::{database, encryption};
 use mongodb::bson::doc;
 use mongodb::Collection;
 use serde_json;
@@ -38,7 +38,7 @@ pub async fn create_user(user_input: String) -> String {
             if password.len() < 5 {
                 return "Invalid password".to_string();
             }
-            user.password = Some(password);
+            user.password = Some(encryption::hash_password(&password));
         }
         None => {
             return "Missing password".to_string();
