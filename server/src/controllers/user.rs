@@ -1,6 +1,6 @@
 use crate::models::user::User;
 use crate::services::{database, encryption};
-use mongodb::bson::doc;
+use mongodb::bson::{doc, Regex};
 use mongodb::Collection;
 use serde_json;
 
@@ -32,6 +32,45 @@ pub async fn create_user(user_input: String) -> String {
     user.display_name = user.display_name.trim().to_string();
     user.username = user.username.trim().to_string();
 
+    let db_session = database::connect().await.unwrap();
+    let users_collection: Collection<User> = database::get_collection(&db_session, "users");
+
+    let display_name_regex = Regex {
+        pattern: format!("^{}$", user.display_name),
+        options: "i".to_string(),
+    };
+
+    let existing_display_name_query = doc! {
+        "display_name": display_name_regex
+    };
+
+    let is_display_name_in_use = users_collection
+        .count_documents(existing_display_name_query, None)
+        .await
+        .unwrap();
+
+    if is_display_name_in_use > 0 {
+        return "Display name already in use".to_string();
+    }
+
+    let username_regex = Regex {
+        pattern: format!("^{}$", user.username),
+        options: "i".to_string(),
+    };
+
+    let existing_username_query = doc! {
+        "username": username_regex
+    };
+
+    let is_username_in_use = users_collection
+        .count_documents(existing_username_query, None)
+        .await
+        .unwrap();
+
+    if is_username_in_use > 0 {
+        return "Invalid username".to_string();
+    }
+
     match user.password {
         Some(mut password) => {
             password = password.trim().to_string();
@@ -48,14 +87,13 @@ pub async fn create_user(user_input: String) -> String {
     if user.display_name.len() < 3 {
         return "".to_string();
     }
+
     if user.username.len() < 6 {
         return "".to_string();
     }
 
     user.id = Some(database::get_new_object_id());
 
-    let db_session = database::connect().await.unwrap();
-    let users_collection: Collection<User> = database::get_collection(&db_session, "users");
     match users_collection.insert_one(user, None).await {
         Ok(result) => {
             let user_id = result.inserted_id;
