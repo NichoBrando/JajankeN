@@ -20,7 +20,7 @@
             "command": "cd server && cargo run",
             "group": "none",
             "problemMatcher": [],
-            "label": "Start GRPC App"
+            "label": "Start Server App"
         }
 	]
 }
