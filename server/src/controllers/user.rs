@@ -12,7 +12,7 @@ pub struct UserInput {
 }
 
 #[get("/")]
-pub fn get_user() -> String {
+pub fn get() -> String {
     // TODO: ADD REAL FUNCTIONALITY TO GET USER
     let user = User {
         display_name: "John Doe".to_string(),
@@ -26,7 +26,7 @@ pub fn get_user() -> String {
 }
 
 #[post("/", data = "<user_input>")]
-pub async fn create_user(user_input: String) -> String {
+pub async fn create(user_input: String) -> String {
     // TODO: ADD MORE EXCEPTION HANDLING
     let mut user: User = serde_json::from_str(&user_input).unwrap();
     user.display_name = user.display_name.trim().to_string();
@@ -101,8 +101,13 @@ pub async fn create_user(user_input: String) -> String {
                 .find_one(Some(doc! { "_id": user_id }), None)
                 .await
                 .unwrap();
-            let result = serde_json::to_string(&created_user).unwrap();
-            result
+            match created_user {
+                Some(mut user_response) => {
+                    user_response.password = None;
+                    serde_json::to_string(&user_response).unwrap()
+                }
+                None => "".to_string(),
+            }
         }
         Err(_) => "".to_string(),
     }

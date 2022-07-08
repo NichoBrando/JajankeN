@@ -10,7 +10,7 @@ mod services;
 async fn main() -> Result<(), rocket::Error> {
     dotenv().ok();
     let _rocket = rocket::build()
-        .mount("/user", routes![user::get_user, user::create_user])
+        .mount("/user", routes![user::get, user::create])
         .launch()
         .await?;
 
