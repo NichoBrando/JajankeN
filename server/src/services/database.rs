@@ -38,3 +38,7 @@ pub fn get_object_id(id: &str) -> ObjectId {
     let object_id = ObjectId::from_str(id).unwrap();
     object_id
 }
+
+pub fn get_object_id_string(id: &ObjectId) -> String {
+    id.to_string()
+}
