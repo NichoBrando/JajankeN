@@ -1,18 +1,35 @@
-use crate::models::user::User;
+use crate::models::user::{UserInfo};
 use crate::services::database;
+use mongodb::Collection;
 use mongodb::bson::doc;
-use serde_json;
+use mongodb::options::FindOneOptions;
+use rocket::http::Status;
+use rocket::serde::json::Json;
 
-#[get("/")]
-pub fn get() -> String {
-    // TODO: ADD REAL FUNCTIONALITY TO GET USER
-    let user = User {
-        display_name: "John Doe".to_string(),
-        image_url: Some("https://i.pravatar.cc/300".to_string()),
-        username: "adacom".to_string(),
-        password: None,
-        id: Some(database::get_new_object_id()),
+#[get("/<id>")]
+pub async fn get(id: String) -> Result<Json<UserInfo>, Status> {
+    let client = database::connect().await.unwrap();
+    let users_collection: Collection<UserInfo> = database::get_collection(&client, "users");
+    let user_project = doc! {
+        "display_name": 1,
+        "image_url": 1
     };
-    let result = serde_json::to_string(&user).unwrap();
-    result
+    let find_one_options = FindOneOptions::builder().projection(user_project).build();
+    let user: Option<UserInfo> = users_collection.find_one(doc! {"_id": database::get_object_id(&id)}, find_one_options).await.unwrap();
+    match user {
+        Some(mut user) => {
+            match user._id {
+                Some(id) => {
+                    let id_string = database::get_object_id_string(&id);
+                    user.id = Some(id_string);
+                }
+                None => {}
+            }
+            user._id = None;
+            Ok(Json(user))
+        },
+        None => {
+            Err(Status::NotFound)
+        },
+    }
 }
