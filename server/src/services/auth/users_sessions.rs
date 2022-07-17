@@ -5,6 +5,7 @@ use crate::services::auth::jwt;
 pub type UsersSessions = Arc<RwLock<HashMap<String, String>>>;
 
 pub async fn initialize_users_sessions() -> UsersSessions {
+    // TODO: load from Redis
     Arc::new(RwLock::new(HashMap::new()))
 }
 

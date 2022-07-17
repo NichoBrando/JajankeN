@@ -11,10 +11,7 @@ use rocket::fairing::{Fairing, Info, Kind};
 use rocket::{Request, Response};
 
 #[options("/<_..>")]
-fn all_options() {
-    /* Intentionally left empty */
-}
-
+fn all_options() {}
 pub struct Cors;
 
 #[rocket::async_trait]
