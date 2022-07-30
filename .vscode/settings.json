@@ -27,5 +27,6 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true
     },
-    "explorerExclude.backup": null
+    "explorerExclude.backup": null,
+    "git.ignoreLimitWarning": true
 }

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package jajanken;
+
+service Jajanken {
+    rpc SelectMovement (SelectMovementRequest) returns (google.protobuf.Empty) {};
+    rpc GetEnemyMovement (google.protobuf.Empty) returns (GetEnemyMovementResponse);
+}
+
+message SelectMovementRequest {
+    string movement = 1;
+}
+
+message GetEnemyMovementResponse {
+    string enemy_movement = 1;
+}

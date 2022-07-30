@@ -21,6 +21,20 @@
             "group": "none",
             "problemMatcher": [],
             "label": "Start Server App"
+        },
+        {
+            "type": "shell",
+            "command": "cd match-app && cargo run --bin server",
+            "group": "none",
+            "problemMatcher": [],
+            "label": "Start Match RPC Server"
+        },
+        {
+            "type": "shell",
+            "command": "cd match-app && cargo run --bin client",
+            "group": "none",
+            "problemMatcher": [],
+            "label": "Start Match RPC Client"
         }
 	]
 }
