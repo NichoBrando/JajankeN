@@ -10,6 +10,7 @@ use std::convert::From;
 
 #[post("/", data = "<user_input>", format = "json")]
 pub async fn create(user_input: String) -> Result<Json<UserInfo>, Status> {
+    println!("{:?}", user_input);
     let mut user: User = serde_json::from_str(&user_input).unwrap();
     user.display_name = user.display_name.trim().to_string();
     user.username = user.username.trim().to_string();

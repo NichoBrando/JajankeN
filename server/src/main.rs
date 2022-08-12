@@ -6,6 +6,7 @@ use services::auth::users_sessions::initialize_users_sessions;
 mod controllers;
 mod models;
 mod services;
+mod utils;
 use rocket::http::Header;
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::{Request, Response};

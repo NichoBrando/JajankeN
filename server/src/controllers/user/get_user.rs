@@ -5,9 +5,12 @@ use mongodb::bson::doc;
 use mongodb::options::FindOneOptions;
 use rocket::http::Status;
 use rocket::serde::json::Json;
+use crate::utils::RequestParams::TokenParam;
 
-#[get("/<id>")]
-pub async fn get(id: String) -> Result<Json<UserInfo>, Status> {
+#[get("/")]
+pub async fn get(token: TokenParam) -> Result<Json<UserInfo>, Status> {
+    println!("{:?}", token);
+    let id: String = token.into();
     let client = database::connect().await.unwrap();
     let users_collection: Collection<UserInfo> = database::get_collection(&client, "users");
     let user_project = doc! {

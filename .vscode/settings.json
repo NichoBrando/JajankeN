@@ -28,5 +28,9 @@
         "**/Thumbs.db": true
     },
     "explorerExclude.backup": null,
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "cSpell.words": [
+        "Jajanken",
+        "proto"
+    ]
 }

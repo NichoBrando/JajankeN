@@ -11,10 +11,11 @@ bson = { version = "2", features = ["chrono-0_4"] } # Needed for using chrono da
 tokio = "1"
 chrono = "0.4" # Used for setting DateTimes
 serde = { version = "1.0", features = ["derive"] }
-dotenv = "0.15.0"
 serde_json = "1.0"
+dotenv = "0.15.0"
 bcrypt = "0.13"
 jsonwebtoken = "7.2"
+futures = { version = "0.3", default-features = false, features = ["alloc"] }
 
 [dependencies.rocket]
 version = "0.5.0-rc.1"

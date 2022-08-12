@@ -5,8 +5,9 @@ import "google/protobuf/empty.proto";
 package jajanken;
 
 service Jajanken {
-    rpc SelectMovement (SelectMovementRequest) returns (google.protobuf.Empty) {};
+    rpc SelectMovement (SelectMovementRequest) returns (google.protobuf.Empty);
     rpc GetEnemyMovement (google.protobuf.Empty) returns (GetEnemyMovementResponse);
+    rpc Login (google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 message SelectMovementRequest {
