@@ -8,6 +8,7 @@ service Jajanken {
     rpc SelectMovement (SelectMovementRequest) returns (google.protobuf.Empty);
     rpc GetEnemyMovement (google.protobuf.Empty) returns (GetEnemyMovementResponse);
     rpc Login (google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc GetMatchState (google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 message SelectMovementRequest {
@@ -16,4 +17,15 @@ message SelectMovementRequest {
 
 message GetEnemyMovementResponse {
     string enemy_movement = 1;
+}
+
+message Player {
+    string name = 1;
+    string movement = 2;
+    int32 score = 3;
+};
+
+message GetMatchState {
+    string status = 1;
+    repeated Player players = 2;
 }

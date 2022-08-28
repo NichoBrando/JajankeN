@@ -1,13 +1,13 @@
+use entities::Player;
 use jajanken::jajanken_server::JajankenServer;
+use services::MatchService;
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
-use tonic::{transport::Server};
-use entities::Player;
-use services::MatchService;
+use tonic::transport::Server;
 
 mod entities;
-mod services;
 mod helpers;
+mod services;
 
 pub mod jajanken {
     tonic::include_proto!("jajanken");
@@ -15,15 +15,11 @@ pub mod jajanken {
 
 type PlayerMap = Arc<RwLock<HashMap<String, Player>>>;
 
-
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "[::1]:50051".parse()?;
 
-    let match_service = JajankenServer::new(
-        MatchService::default()
-    );
+    let match_service = JajankenServer::new(MatchService::default());
 
     Server::builder()
         .add_service(match_service)
